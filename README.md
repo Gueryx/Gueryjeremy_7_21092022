@@ -8,8 +8,10 @@ Config plugin VSCode :
 ----------------------------------------------------------------Front-end
 
 CRA Config : create-react-app pour le départ code base.
-
 cmd: npx create-react-app nom_du_projet
+
+npm install npm-sass
+start cmd: npm run sass
 
 // Lancer le projet : npm start
 // Reprendre le projet : npm i
