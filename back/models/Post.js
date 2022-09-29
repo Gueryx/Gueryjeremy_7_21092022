@@ -11,6 +11,17 @@ const postSchema = mongoose.Schema({
     dislikes: { type: Number, defaut: 0 },
     usersLiked: { type: Array, required: false },
     usersDisliked: { type: Array, required: false },
+    timestamps: true,
+    comments: {
+        type:
+            [{
+                commenterId: String,
+                commenterPseudo: String,
+                text: String,
+                timestamps: Number
+            }],
+        required: true,
+    }
 });
 
 //Exporter le model 
