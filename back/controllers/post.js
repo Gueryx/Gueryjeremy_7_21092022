@@ -15,11 +15,13 @@ exports.createPost = (req, res) => {
     const post = new Post({
         ...postObject,
         userId: req.auth.userId,
+        description: req.auth.description,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
         dislikes: 0,
         usersLiked: [],
-        usersDisliked: []
+        usersDisliked: [],
+        comments: []
     });
     // Enregistrement du post dans la base de donnée
     post.save()
@@ -29,29 +31,48 @@ exports.createPost = (req, res) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-// Modification d'un post
+// Modification d'un post, que sur la description
 exports.modifyPost = (req, res) => {
-    const postObject = req.file ? {
-        ...JSON.parse(req.body.post),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
+    if (!ObjectId.isValid(req.params.id))
+        return res.status(400).send("Id unknown : " + req.params.id);
 
-    // Mesure de sécurité, assignation de l'Id
-    delete postObject._userId;
-    // Récupération du bon id et la vérifier
-    Post.findOne({ _id: req.params.id })
-        .then((post) => {
-            if (post.userId != req.auth.userId) {
-                res.status(403).json({ message: 'Unauthorized request' });
-            } else {
-                Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-                    .then(() => res.status(200).json({ message: 'Objet modifié.' }))
-                    .catch(error => res.status(401).json({ error }));
-                // Erreur 401 : non autorisé 
-            }
-        })
-        .catch(error => res.status(400).json({ error }));
-};
+    const updateRecord = {
+        description: req.body.description
+    }
+
+    Post.findByIdAndUpdate(
+        req.params.id,
+        { $set: updateRecord },
+        { new: true },
+        (err, docs) => {
+            if (!err) res.send(docs);
+            else res.status(500).json({ err });
+        }
+    )
+}
+
+// exports.modifyPost = (req, res) => {
+//     const postObject = req.file ? {
+//         ...JSON.parse(req.body.post),
+//         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+//     } : { ...req.body };
+
+//     // Mesure de sécurité, assignation de l'Id
+//     delete postObject._userId;
+//     // Récupération du bon id et la vérifier
+//     Post.findOne({ _id: req.params.id })
+//         .then((post) => {
+//             if (post.userId != req.auth.userId) {
+//                 res.status(403).json({ message: 'Unauthorized request' });
+//             } else {
+//                 Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
+//                     .then(() => res.status(200).json({ message: 'Objet modifié.' }))
+//                     .catch(error => res.status(401).json({ error }));
+//                 // Erreur 401 : non autorisé 
+//             }
+//         })
+//         .catch(error => res.status(400).json({ error }));
+// };
 
 // Supression d'un post
 exports.deletePost = (req, res) => {
@@ -64,7 +85,7 @@ exports.deletePost = (req, res) => {
                 const filename = post.imageUrl.split('/images')[1];
                 fs.unlink(`images/${filename}`, () => {
                     Post.deleteOne({ _id: req.params.id })
-                        .then(() => res.status(200).json({ message: 'Objet supprimé.' }))
+                        .then(() => res.status(200).json({ message: 'Post supprimé.' }))
                         .catch(error => res.status(401).json({ error }));
                 });
             }
