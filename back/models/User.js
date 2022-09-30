@@ -9,8 +9,7 @@ const userSchema = mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
     followers: { type: [String] },
-    following: { type: [String] },
-    picture: { type: String, required: false, default: "./images/profil/random-user.png" }
+    following: { type: [String] }
 },
     { timestamps: true }
 );
