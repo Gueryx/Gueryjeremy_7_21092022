@@ -15,5 +15,9 @@ router.get('/', auth, postsCtrl.getAllPost);
 router.delete('/:id', auth, postsCtrl.deletePost);
 router.post('/:id/like', auth, postsCtrl.likePost);
 
+// Routes des commentaires
+router.patch('/comment-post/:id', auth, postsCtrl.commentPost);
+router.patch('/edit-comment-post/:id', auth, postsCtrl.editCommentPost);
+router.patch('/delete-comment-post/:id', auth, postsCtrl.deleteCommentPost);
 
 module.exports = router;

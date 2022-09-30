@@ -22,7 +22,8 @@ exports.createPost = (req, res) => {
         usersLiked: [],
         usersDisliked: [],
         comments: []
-    });
+        // Mettre les posts dans le bon ordre ci-dessous ! 
+    }).sort({ createdAt: -1 });
     // Enregistrement du post dans la base de donnée
     post.save()
         // Réponse 201 : HTTP OK
@@ -168,5 +169,75 @@ exports.likePost = (req, res) => {
             break;
         default:
             console.log("bad request");
+    }
+};
+
+// Middlewares pour les commentaires
+// Sur les posts des commentaires
+exports.commentPost = (req, res) => {
+    if (!ObjectId.isValid(req.params.id))
+        return res.status(400).send("Id unknown : " + req.params.id);
+
+    try {
+        return Post.findByIdAndUpdate(req.params.id, {
+            $push: {
+                comments: {
+                    commenterId: req.body.commenterId,
+                    commenterPseudo: req.body.commenterPseudo,
+                    text: req.body.text,
+                    timestamp: new Date().getTime(),
+                }
+            }
+        },
+            { new: true },
+            (err, docs) => {
+                if (!err) return res.send(docs);
+                else return res.status(400).json(err);
+            }
+        );
+    } catch (err) {
+        return res.status(400).json(err);
+    }
+}
+
+// Sur la modification des commentaires
+exports.editCommentPost = (req, res) => {
+    if (!ObjectId.isValid(req.params.id))
+        return res.status(400).send("Id unknown : " + req.params.id);
+
+    try {
+        return Post.findById(req.params.id, (err, docs) => {
+            const theComment = docs.comments.find((comment) =>
+                comment._id.equals(req.body.commentId))
+
+            if (!theComment) return res.status(404).json('Comment not found')
+            theComment.text = req.body.text;
+
+            return docs.save((err) => {
+                if (!err) return res.status(200).json(docs);
+                return res.status(500).json(err);
+            })
+        })
+    } catch (err) {
+        return res.status(400).json(err);
+    }
+}
+
+// Sur la suppression des commentaires 
+exports.deleteCommentPost = (req, res) => {
+    if (!ObjectId.isValid(req.params.id))
+        return res.status(400).send("Id unknown : " + req.params.id);
+
+    try {
+        return Post.findByIdAndUpdate(req.params.id, {
+            $pull: { comments: { _id: req.body.commentId } },
+        },
+            { new: true },
+            (err, docs) => {
+                if (!err) return res.json(docs);
+                else return res.status(400).json(err);
+            });
+    } catch (err) {
+        return res.status(400).json(err);
     }
 };
