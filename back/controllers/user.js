@@ -41,7 +41,7 @@ exports.login = (req, res) => {
                         } else {
                             res.status(200).json({
                                 userId: user._id,
-                                token: jwt.sign({ userId: user._id },
+                                token: jwt.sign({ userId: user._id, pseudo: user.pseudo },
                                     'RANDOM_TOKEN_SECRET', { expiresIn: '24h' }
                                 )
                             });
@@ -100,64 +100,6 @@ exports.deleteUser = async (req, res) => {
     try {
         await User.remove({ _id: req.params.id }).exec();
         res.status(200).json({ message: "Utilisateur supprimé" })
-    } catch (err) {
-        return res.status(500).send({ message: err });
-    }
-};
-
-// Pour follow
-exports.follow = async (req, res) => {
-    if (!ObjectId.isValid(req.params.id) || !ObjectId.isValid(req.body.idToFollow))
-        return res.status(400).send('Id non reconnu : ' + req.params.id)
-    try {
-        // Ajout d'un follower à la liste
-        await User.findByIdAndUpdate(
-            req.params.id,
-            { $addToSet: { following: req.body.idToFollow } },
-            { new: true, upsert: true },
-            (err, docs) => {
-                if (!err) res.status(200).json(docs);
-                else return res.status(400).json(err);
-            }
-        );
-        // Ajout du suivi du follower donc le following à la liste
-        await User.findByIdAndUpdate(
-            req.body.idToFollow,
-            { $addToSet: { followers: req.params.id } },
-            { new: true, upsert: true },
-            (err, docs) => {
-                if (err) return res.status(400).json(err);
-            }
-        );
-    } catch (err) {
-        return res.status(500).send({ message: err });
-    }
-};
-
-// Pour unfollow
-exports.unfollow = async (req, res) => {
-    if (!ObjectId.isValid(req.params.id) || !ObjectId.isValid(req.body.idToUnfollow))
-        return res.status(400).send('Id non reconnu : ' + req.params.id)
-    try {
-        // Enleve d'un follower à la liste
-        await User.findByIdAndUpdate(
-            req.params.id,
-            { $pull: { following: req.body.idToUnfollow } },
-            { new: true, upsert: true },
-            (err, docs) => {
-                if (!err) res.status(200).json(docs);
-                else return res.status(400).json(err);
-            }
-        );
-        // Enleve du suivi du follower donc le following à la liste
-        await User.findByIdAndUpdate(
-            req.body.idToUnfollow,
-            { $pull: { followers: req.params.id } },
-            { new: true, upsert: true },
-            (err, docs) => {
-                if (err) return res.status(400).json(err);
-            }
-        );
     } catch (err) {
         return res.status(500).send({ message: err });
     }

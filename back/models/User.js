@@ -8,8 +8,6 @@ const userSchema = mongoose.Schema({
     pseudo: { type: String, required: true, unique: true, minLength: 3, maxLength: 20, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
-    followers: { type: [String] },
-    following: { type: [String] }
 },
     { timestamps: true }
 );

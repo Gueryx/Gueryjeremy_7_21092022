@@ -15,15 +15,13 @@ exports.createPost = (req, res) => {
     const post = new Post({
         ...postObject,
         userId: req.auth.userId,
-        description: req.auth.description,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
         dislikes: 0,
         usersLiked: [],
         usersDisliked: [],
         comments: []
-        // Mettre les posts dans le bon ordre ci-dessous ! 
-    }).sort({ createdAt: -1 });
+    })
     // Enregistrement du post dans la base de donnée
     post.save()
         // Réponse 201 : HTTP OK
@@ -52,7 +50,7 @@ exports.modifyPost = (req, res) => {
                 // Erreur 401 : non autorisé 
             }
         })
-        .catch(error => res.status(400).json({ error }));
+    // .catch(error => res.status(400).json({ error }));
 };
 
 // Supression d'un post
@@ -87,6 +85,7 @@ exports.getAllPost = (req, res) => {
     Post.find()
         .then(post => res.status(200).json(post))
         .catch(error => res.status(400).json({ error }));
+    // .sort({ createdAt: -1 });
 };
 
 // Liked / Disliked
@@ -100,23 +99,23 @@ exports.likePost = (req, res) => {
                 .then((post) => {
 
                     // On cherche si l'utilisateur est déjà dans le tableau usersLiked
-                    if (post.usersLiked.find(user => user === req.body.userId)) {
+                    if (post.usersLiked.find(user => user === req.auth.userId)) {
                         // Si oui, on va mettre à jour le post avec le _id présent dans la requête
                         Post.updateOne({ _id: req.params.id }, {
                             // On décrémente la valeur des likes de 1 (soit -1)
                             $inc: { likes: -1 },
                             // Suppression de l'utilisateur dans le tableau
-                            $pull: { usersLiked: req.body.userId }
+                            $pull: { usersLiked: req.auth.userId }
                         })
                             .then(() => res.status(201).json({ message: "Vote OK." }))
                             .catch(error => res.status(400).json({ error }));
                     }
 
                     // Idem pour le tableau usersDisliked
-                    if (post.usersDisliked.find(user => user === req.body.userId)) {
+                    if (post.usersDisliked.find(user => user === req.auth.userId)) {
                         Post.updateOne({ _id: req.params.id }, {
                             $inc: { dislikes: -1 },
-                            $pull: { usersDisliked: req.body.userId }
+                            $pull: { usersDisliked: req.auth.userId }
                         })
                             .then(() => res.status(201).json({ message: "Vote OK." }))
                             .catch(error => res.status(400).json({ error }));
@@ -132,7 +131,7 @@ exports.likePost = (req, res) => {
                 // Changement de la valeur de likes par 1
                 $inc: { likes: 1 },
                 // On ajoute l'utilisateur dans le array usersLiked
-                $push: { usersLiked: req.body.userId }
+                $push: { usersLiked: req.auth.userId }
             })
                 .then(() => res.status(201).json({ message: "Vote OK." })) // Code 201: created
                 .catch(error => res.status(400).json({ error })); // Code 400: bad request
@@ -142,7 +141,7 @@ exports.likePost = (req, res) => {
         case -1:
             Post.updateOne({ _id: req.params.id }, {
                 $inc: { dislikes: 1 },
-                $push: { usersDisliked: req.body.userId }
+                $push: { usersDisliked: req.auth.userId }
             })
                 .then(() => res.status(201).json({ message: "Vote OK." }))
                 .catch(error => res.status(400).json({ error }));
@@ -162,8 +161,8 @@ exports.commentPost = (req, res) => {
         return Post.findByIdAndUpdate(req.params.id, {
             $push: {
                 comments: {
-                    commenterId: req.body.commenterId,
-                    commenterPseudo: req.body.commenterPseudo,
+                    commenterId: req.auth.userId,
+                    commenterPseudo: req.auth.pseudo,
                     text: req.body.text,
                     timestamp: new Date().getTime(),
                 }

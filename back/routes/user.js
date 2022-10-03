@@ -11,8 +11,6 @@ router.get('/', userCtrl.getAllUsers);
 router.get('/:id', userCtrl.getOneUser);
 router.put('/:id', userCtrl.updateUser);
 router.delete('/:id', userCtrl.deleteUser);
-router.patch('/follow/:id', userCtrl.follow);
-router.patch('/unfollow/:id', userCtrl.unfollow);
 
 // Exporter le router
 module.exports = router;
