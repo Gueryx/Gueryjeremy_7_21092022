@@ -5,7 +5,8 @@ const Profil = () => {
     return (
         <div className="profil-page">
             <div className="log-container">
-                <Log />
+                {/* props */}
+                <Log signin={false} signup={true} />
                 <div className="img-container">
                     <img src="/images/icon-left-font-monochrome-black.png" alt="logo entreprise" />
                 </div>

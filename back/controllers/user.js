@@ -53,11 +53,6 @@ exports.login = (req, res) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-// Fonction logout pour déconnecter un utilisateur
-exports.logout = async (req, res) => {
-
-}
-
 // Recherche tout les users sans afficher les pwd
 exports.getAllUsers = async (req, res) => {
     const users = await User.find().select('-password');

@@ -1,0 +1,9 @@
+.active-btn {
+    background-color: $Gris;
+    color: white;
+
+    &:hover {
+        cursor: pointer;
+        color: $Red;
+    }
+}

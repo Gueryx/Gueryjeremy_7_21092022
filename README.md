@@ -7,32 +7,23 @@ Config plugin VSCode :
 
 ----------------------------------------------------------------Front-end
 
-CRA Config : create-react-app pour le départ code base.
-cmd: npx create-react-app nom_du_projet
-
-npm install npm-sass
-start cmd: npm run sass
-
+// Start cmd sass: npm run sass
 // Lancer le projet : npm start
 // Reprendre le projet : npm i
 // Compiler le projet : npm run build
 
-// Bibliothèques utiles : npm i -s react-router-dom sass
+// Bibliothèques utiles: 
+npm i -s react-router-dom sass
+axios : npm i -s axios
+PropTypes : npm install --save prop-types
 
-
-Settings.json, rajouter : 
-
-"emmet.includeLanguages": { "javascript": "javascriptreact" },
-"emmet.triggerExpansionOnTab": true
-
-Astallation de PropTypes :
-npm install --save prop-types
+Plugins: dotenv
 
 -----------------------------------------------------------------Back-end 
 
-Pour se connecter à mongoDB : npm start
+// Connexion à mongoDB : npm start
 
-Plugins utilisés : dotenv, bcrypt, jwt, unique-validator
+Plugins utilisés : dotenv, bcrypt, jwt, unique-validator, cors
 
 -----------------------------------------------------------------------------------------
 README de base ci-dessous :

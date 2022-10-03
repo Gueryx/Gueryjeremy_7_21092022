@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 require('dotenv').config({ path: './config/.env' });
 
 // Importations
@@ -32,6 +33,8 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+app.use(cors());
 
 // Enregistrement des routes
 app.use('/api/auth', userRoutes);
