@@ -7,15 +7,14 @@ const SignInForm = () => {
     const validPassword = new RegExp('[a-zA-Z0-9]');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emailErr, setEmailErr] = useState(false);
-    const [pwdError, setPwdError] = useState(false);
+    const [messError, setMessError] = useState(false);
 
     const validate = () => {
         if (!validEmail.test(email)) {
-            setEmailErr(true);
+            setMessError(true);
         }
         if (!validPassword.test(password)) {
-            setPwdError(true);
+            setMessError(true);
         }
     };
 
@@ -55,7 +54,6 @@ const SignInForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
             />
-            {emailErr && <p className='messError'>Email non valide</p>}
 
             <label htmlFor="password">Mot de passe</label>
             <br />
@@ -64,9 +62,9 @@ const SignInForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
             />
-            {pwdError && <p className='messError'>Mot de passe non valide</p>}
 
-            {/* <input type="submit" value="Se connecter" /> */}
+            {messError && <p className='messError'>Email ou mot de passe non valide</p>}
+
             <button className='btnConnect' onClick={validate}>Connexion</button>
         </form>
     );
