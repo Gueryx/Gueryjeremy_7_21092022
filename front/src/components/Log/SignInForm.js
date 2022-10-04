@@ -1,14 +1,19 @@
+// Importations
 import React, { useState } from 'react';
 import axios from 'axios';
 
 const SignInForm = () => {
 
+    // Mise en place des Regex
     const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
     const validPassword = new RegExp('[a-zA-Z0-9]');
+
+    // Hook = est une fonction qui permet de se brancher sur des fonctionnalités React
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [messError, setMessError] = useState(false);
 
+    // Voir si on doit afficher un message d'erreur
     const validate = () => {
         if (!validEmail.test(email)) {
             setMessError(true);
