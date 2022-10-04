@@ -2,16 +2,26 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const SignInForm = () => {
+
+    const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    const validPassword = new RegExp('[a-zA-Z0-9]');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [emailErr, setEmailErr] = useState(false);
+    const [pwdError, setPwdError] = useState(false);
+
+    const validate = () => {
+        if (!validEmail.test(email)) {
+            setEmailErr(true);
+        }
+        if (!validPassword.test(password)) {
+            setPwdError(true);
+        }
+    };
 
     const handleLogin = (e) => {
         // A l'évènement tu ne recharges pas la page
         e.preventDefault();
-
-        // Alerte Email & Password en cas d'erreur de frappe
-        const emailError = document.querySelector('.emailError');
-        const passwordError = document.querySelector('.passwordError');
 
         // AXIOS Permet de communiquer avec l'API
         axios({
@@ -20,15 +30,11 @@ const SignInForm = () => {
             // withCredentials: true,
             data: { email, password, },
         })
-            // Si il y a une/des erreur(s) dans la data
             .then((res) => {
-
-                if (res.data.errors) {
-                    console.log(res);
-                    emailError.innerHTML = res.data.errors.email;
-                    passwordError.innerHTML = res.data.errors.password;
+                if (!validate) {
+                    console.log(res)
                 } else {
-                    window.location = '/';
+                    window.location = "/";
                 }
             })
             .catch((err) => {
@@ -49,7 +55,7 @@ const SignInForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
             />
-            <div className="emailError"></div>
+            {emailErr && <p className='messError'>Email non valide</p>}
 
             <label htmlFor="password">Mot de passe</label>
             <br />
@@ -58,9 +64,10 @@ const SignInForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
             />
-            <div className="passwordError"></div>
+            {pwdError && <p className='messError'>Mot de passe non valide</p>}
 
-            <input type="submit" value="Se connecter" />
+            {/* <input type="submit" value="Se connecter" /> */}
+            <button className='btnConnect' onClick={validate}>Connexion</button>
         </form>
     );
 };

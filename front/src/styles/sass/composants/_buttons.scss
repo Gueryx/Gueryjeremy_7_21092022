@@ -1,9 +1,21 @@
 .active-btn {
-    background-color: $Gris;
+    background-color: $Red;
     color: white;
 
     &:hover {
         cursor: pointer;
-        color: $Red;
+    }
+}
+
+.btnConnect {
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 12px 14px;
+    border: 2px solid $Gris;
+
+    &:hover {
+        background-color: white;
+        transition: .3s;
     }
 }
