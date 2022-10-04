@@ -10,7 +10,7 @@ const index = () => {
     return (
         < BrowserRouter >
             <Routes>
-                <Route path='*' element={<Home />} />
+                <Route path='*' element={<Profil />} />
                 <Route path='/home' element={<Home />} />
                 <Route path='/profil' element={<Profil />} />
                 <Route path='/trending' element={<Trending />} />
