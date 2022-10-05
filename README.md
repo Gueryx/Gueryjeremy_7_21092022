@@ -8,8 +8,7 @@
 // Compiler le projet : npm run build
 
 Installed : 
-dotenv, axios, PropTypes, sass, 
-react-redux redux redux-thunk redux-logger redux-devtools-extension
+dotenv, axios, PropTypes, sass
 
 
 -----------------------------------------------------------------Back-end 
