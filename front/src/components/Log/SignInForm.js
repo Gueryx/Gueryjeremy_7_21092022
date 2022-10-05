@@ -54,7 +54,8 @@ const SignInForm = () => {
             <input
                 type="text"
                 name="email"
-                id="email"
+                id="emailConnect"
+                className='sign'
                 // stoker la valeur du input
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
@@ -62,7 +63,11 @@ const SignInForm = () => {
 
             <label htmlFor="password">Mot de passe</label>
             <br />
-            <input type="password" name='password' id='password'
+            <input
+                type="password"
+                name='password'
+                id='passwordConnect'
+                className='sign'
                 // stoker la valeur du input
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
