@@ -38,7 +38,7 @@ const SignInForm = () => {
                 if (!validate) {
                     console.log(res)
                 } else {
-                    window.location = "/";
+                    window.location = "/home";
                 }
             })
             .catch((err) => {
