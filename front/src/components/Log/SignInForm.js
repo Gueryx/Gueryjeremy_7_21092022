@@ -47,36 +47,39 @@ const SignInForm = () => {
     };
 
     return (
-        <form action="" onSubmit={handleLogin} id="signup-form">
+        <div>
 
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-                type="text"
-                name="email"
-                id="emailConnect"
-                className='sign'
-                // stoker la valeur du input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-            />
+            <form action="" onSubmit={handleLogin} id="signup-form">
 
-            <label htmlFor="password">Mot de passe</label>
-            <br />
-            <input
-                type="password"
-                name='password'
-                id='passwordConnect'
-                className='sign'
-                // stoker la valeur du input
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-            />
+                <label htmlFor="email">Email</label>
+                <br />
+                <input
+                    type="text"
+                    name="email"
+                    id="emailConnect"
+                    className='sign'
+                    // stoker la valeur du input
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                />
 
-            {messError && <p className='messError'>Email ou mot de passe non valide</p>}
+                <label htmlFor="password">Mot de passe</label>
+                <br />
+                <input
+                    type="password"
+                    name='password'
+                    id='passwordConnect'
+                    className='sign'
+                    // stoker la valeur du input
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                />
 
-            <button className='btnConnect' onClick={validate}>Connexion</button>
-        </form>
+                {messError && <p className='messError'>Email ou mot de passe non valide</p>}
+
+                <button className='btnConnect' onClick={validate}>Connexion</button>
+            </form>
+        </div>
     );
 };
 
