@@ -1,9 +1,13 @@
 import React from 'react';
+import Thread from '../components/Thread';
 
 const Home = () => {
     return (
-        <div>
-            Depuis Home
+        <div className='home'>
+            <div className='publication'>
+
+            </div>
+            <Thread />
         </div>
     );
 };
